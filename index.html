@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>부산대학교 취업 준비 유형 테스트</title>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        
+        body { 
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; 
+            background-color: #f4f6f8; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+            color: #222; 
+        }
+        .container { 
+            width: 100%; 
+            max-width: 480px; 
+            background: white; 
+            min-height: 100vh; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            padding: 70px 20px 40px 20px; /* 상단 로고 공간 확보를 위해 padding-top 증가 */
+            box-sizing: border-box; 
+            text-align: center; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.05); 
+            position: relative; 
+        }
+        
+        /* 좌측 상단 고정 텍스트 */
+        .top-left-logo {
+            position: absolute;
+            top: 25px;
+            left: 20px;
+            font-size: 15px;
+            font-weight: 800;
+            color: #003e7a;
+            text-align: left;
+        }
+
+        /* 중앙 배치 로고 이미지 */
+        .main-logo-img {
+            width: 160px;
+            margin: 0 auto 20px auto;
+            display: block;
+        }
+        
+        /* 타이포그래피 */
+        h1 { font-size: 28px; color: #003e7a; margin-top: 10px; margin-bottom: 10px; line-height: 1.3; font-weight: 800; word-break: keep-all;}
+        h2 { font-size: 20px; margin-bottom: 30px; line-height: 1.5; word-break: keep-all; font-weight: 600; color: #111; }
+        p { word-break: keep-all; }
+        
+        /* 버튼 스타일 모바일 최적화 */
+        .btn { 
+            display: block; 
+            width: 100%; 
+            background-color: #f8f9fa; 
+            border: 1.5px solid #eaeaea; 
+            padding: 18px 15px; 
+            margin-bottom: 12px; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            font-weight: 500;
+            cursor: pointer; 
+            transition: all 0.2s ease-in-out; 
+            word-break: keep-all; 
+            line-height: 1.4; 
+            color: #333;
+            text-align: center;
+        }
+        .btn:active, .btn:hover { background-color: #e6f0ff; border-color: #003e7a; color: #003e7a; font-weight: 600; }
+        
+        .result-box { background-color: #f4f8ff; padding: 25px 20px; border-radius: 16px; margin-bottom: 25px; text-align: left; border: 1px solid #e1ecff; }
+        
+        /* 프로그램 추천 링크 버튼 스타일 */
+        .link-btn { 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%; 
+            background-color: #003e7a; 
+            color: white; 
+            padding: 16px 10px; 
+            border-radius: 12px; 
+            text-decoration: none; 
+            font-weight: 700; 
+            margin-bottom: 12px;
+            font-size: 16px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 6px rgba(0, 62, 122, 0.2);
+        }
+        a.link-btn:active { background-color: #002b55; transform: scale(0.98); }
+        .link-desc { font-size: 12px; font-weight: 400; opacity: 0.85; margin-top: 4px; }
+
+        /* 터치 불가(비활성화) 버튼용 클래스 */
+        .disabled-btn {
+            background-color: #6c757d; 
+            cursor: default;
+            pointer-events: none; 
+            box-shadow: none;
+        }
+
+        /* 프로그레스 바 */
+        .progress-bar { width: 100%; background-color: #f0f0f0; height: 6px; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+        .progress { width: 0%; height: 100%; background-color: #003e7a; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; }
+        
+        #question-screen, #result-screen { display: none; width: 100%; }
+        
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 좌측 상단 고정 헤더 -->
+    <div class="top-left-logo">부산대학교 학생성공개발원</div>
+
+    <!-- 시작 화면 -->
+    <div id="start-screen">
+        <img src="부산대학교 로고.png" class="main-logo-img" alt="부산대학교 로고">
+        
+        <h1>나의<br>취업 준비 유형은?</h1>
+        <p style="margin-top: 15px; margin-bottom: 50px; font-size: 17px; color: #555; line-height: 1.5;">나에게 맞는 취업 준비 방향부터<br>학내 프로그램까지, 한눈에 찾아보세요!</p>
+        
+        <button class="btn" style="background-color: #003e7a; color: white; font-weight: bold; border: none; font-size: 18px; padding: 20px;" onclick="startTest()">테스트 시작하기</button>
+    </div>
+
+    <!-- 질문 화면 -->
+    <div id="question-screen">
+        <div class="progress-bar"><div class="progress" id="progress"></div></div>
+        <p id="q-num" style="color:#003e7a; font-weight:800; font-size: 18px; margin-bottom: 10px; text-align: left;"></p>
+        <h2 id="q-title" style="text-align: left;"></h2>
+        <div id="answers" style="margin-top: 30px;"></div>
+    </div>
+
+    <!-- 결과 화면 -->
+    <div id="result-screen">
+        <div style="font-size: 14px; font-weight: bold; color: #003e7a; margin-bottom: -5px; text-align: center;">분석 완료! 당신의 유형은</div>
+        <h1 id="r-title" style="margin-top: 0;"></h1>
+        
+        <div class="result-box">
+            <h3 style="margin-top:0; color:#003e7a; font-size: 18px;">💡 현재 상태 진단</h3>
+            <p id="r-desc" style="font-size:15px; line-height:1.6; color:#333; margin-bottom:0;"></p>
+        </div>
+        
+        <h3 style="text-align: left; margin-bottom: 15px; font-size: 18px; color: #111;">🎯 추천 프로그램 (신청 링크)</h3>
+        <div id="r-links"></div>
+        
+        <button class="btn" style="margin-top: 30px; background: transparent; border: 1px solid #ccc; color: #666;" onclick="location.reload()">테스트 다시하기 ↻</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "전공 조별 과제를 진행할 때, 본인이 가장 선호하거나 주로 맡는 역할은 무엇입니까?", score: 10, answers: [{ type: "A", text: "과제의 전체적인 방향성을 설정하고 기획안 도출하기" }, { type: "B", text: "현장 조사, 실험, 데이터 등 실질적인 자료 수집하기" }, { type: "C", text: "자료를 바탕으로 완성도 높은 결과물 만들고 일정 관리하기" }] },
+        { q: "다가오는 방학을 앞두고, 본인이 가장 우선순위로 두고 있는 계획은 무엇입니까?", score: 20, answers: [{ type: "A", text: "직무 설명회나 특강에 참여하며 진로 방향 구체화하기" }, { type: "B", text: "인턴십, 아르바이트 등 현장에서 실무 경험 쌓기" }, { type: "C", text: "어학 성적 취득, 자격증 준비 및 자소서 초안 작성하기" }] },
+        { q: "기업의 채용 공고를 확인할 때, 가장 중요하게 검토하는 항목은 무엇입니까?", score: 30, answers: [{ type: "A", text: "담당 업무의 상세 내용과 나의 적성 부합 여부" }, { type: "B", text: "지원 자격에 명시된 요구 직무 경험 및 프로젝트 이력" }, { type: "C", text: "서류 마감 기한, 전형 단계별 일정 등 채용 프로세스" }] },
+        { q: "학내 취업 지원 프로그램 중 가장 참여하고 싶은 형태는 무엇입니까?", score: 30, answers: [{ type: "A", text: "관심 산업군 및 직무 현직자와의 멘토링 프로그램" }, { type: "B", text: "학점 인정과 직무 경험을 동시에 얻는 현장실습" }, { type: "C", text: "전문 컨설턴트가 진행하는 서류/면접 1:1 컨설팅" }] },
+        { q: "현재 취업 준비 과정에서 본인에게 가장 필요하다고 생각하는 지원은?", score: 41, answers: [{ type: "A", text: "관심 기업 현직자 선배와의 진로 상담 및 직무 정보 교류" }, { type: "B", text: "실제 기업 환경에서 업무를 수행해 볼 수 있는 단기 인턴십" }, { type: "C", text: "인사 실무자의 관점에서 제공되는 자기소개서 첨삭" }] },
+        { q: "성공적인 취업을 위해 현재 가장 집중해서 보완해야 할 부분은?", score: 42, answers: [{ type: "A", text: "명확한 커리어 목표 설정 및 학년별 취업 준비 로드맵 수립" }, { type: "B", text: "직무 역량을 증명할 수 있는 구체적인 프로젝트 및 실무 경험" }, { type: "C", text: "보유한 경험을 직무 역량과 연결하여 논리적인 자소서 완성" }] },
+        { q: "이번 학기, 학생성공개발원을 통해 가장 먼저 해결하고 싶은 고민은?", score: 44, answers: [{ type: "A", text: "나에게 맞는 직무가 무엇인지 명확히 알고 싶습니다." }, { type: "B", text: "경력 기술서에 작성할 실질적인 직무 경험이 필요합니다." }, { type: "C", text: "서류 통과율을 높이고 면접 실전 감각을 키우고 싶습니다." }] }
+    ];
+
+    const results = {
+        A: { 
+            title: "[EXPLORER] 탐색형<br><span style='font-size:18px;color:#555;font-weight:500;'>아직 내 길이 궁금한 갓생 탐험가 🔭</span>", 
+            desc: "현재 본인의 적성을 파악하고 커리어의 방향성을 설정해 나가는 단계에 있습니다. 본격적인 취업 준비에 앞서 다양한 산업군과 직무 정보를 수집하고, 나만의 로드맵을 기획하여 시행착오를 줄이는 것이 중요합니다.", 
+            links: [
+                { name: "저학년 진로설계 공모전", desc: "커리어 로드맵 짜고 스펙 쌓기", url: "https://www.instagram.com/p/Dc8QvjUmg9a/?img_index=1" }, 
+                { name: "현직자 선배초청 토크콘서트", desc: "대기업 및 공기업 현직자 썰 듣기", url: "https://www.instagram.com/p/Dc0Ez5pGhAi/?img_index=4" }
+            ] 
+        },
+        B: { 
+            title: "[DOER] 실전경험형<br><span style='font-size:18px;color:#555;font-weight:500;'>실무 경험으로 승부하는 행동파 🏃‍♂️</span>", 
+            desc: "희망 직무 방향은 잡혀 있으나, 이를 뒷받침할 구체적인 실무 경험이 필요한 단계입니다. '직무 적합성'을 증명하기 위해 이론을 넘어 실제 업무 환경을 경험하고 실무 감각을 익히는 것이 무엇보다 중요합니다.", 
+            links: [
+                { name: "국내 현장실습 프로그램", desc: "학점+실무 경험 알짜배기", url: "https://www.instagram.com/p/DbuaZ_PGpui/?img_index=1" }, 
+                { name: "국외현장실습학기제", desc: "접수마감: 9.29 (글로벌 역량 강화!)", url: "https://www.instagram.com/p/DdIzL12TC6t/" }
+            ] 
+        },
+        C: { 
+            title: "[FINISHER] 최종합격형<br><span style='font-size:18px;color:#555;font-weight:500;'>서류·면접 도장 깨기 전문 🏆</span>", 
+            desc: "본격적인 구직 활동을 진행 중이거나 앞두고 있는 단계입니다. 이제는 보유한 역량을 기업의 언어에 맞게 정제하고, 서류 및 면접 전형에서의 합격률을 높이기 위한 전략적인 접근과 전문가의 피드백이 필수적입니다.", 
+            links: [
+                { name: "온라인 자소서 1:1 클리닉", desc: "자기소개서 실전반 벼락치기", url: "https://www.instagram.com/p/DcleI3GGkIp/?img_index=1" }, 
+                { name: "PNU 추천채용 공고", desc: "학교 단독 추천으로 합격률 UP", url: "https://www.instagram.com/p/DbZfvCVmoDh/?img_index=1" }, 
+                { name: "실전 모의 면접 프로그램", desc: "모집: 9.28~10.20 / 운영: 10.26~11.6", url: "#" } 
+            ] 
+        }
+    };
+
+    let currentQ = 0;
+    let scores = { A: 0, B: 0, C: 0 };
+
+    function startTest() {
+        document.getElementById("start-screen").style.display = "none";
+        document.getElementById("question-screen").style.display = "block";
+        window.scrollTo(0,0);
+        showQuestion();
+    }
+
+    function showQuestion() {
+        if (currentQ >= questions.length) { showResult(); return; }
+        const q = questions[currentQ];
+        document.getElementById("q-num").innerText = "Q" + (currentQ + 1) + ".";
+        document.getElementById("q-title").innerText = q.q;
+        
+        setTimeout(() => {
+            document.getElementById("progress").style.width = ((currentQ + 1) / questions.length * 100) + "%";
+        }, 50);
+        
+        let btnHtml = "";
+        q.answers.forEach(ans => {
+            btnHtml += `<button class='btn' onclick='selectAnswer("${ans.type}", ${q.score})'>${ans.text}</button>`;
+        });
+        document.getElementById("answers").innerHTML = btnHtml;
+    }
+
+    function selectAnswer(type, score) {
+        scores[type] += score;
+        currentQ++;
+        window.scrollTo(0,0);
+        showQuestion();
+    }
+
+    function showResult() {
+        document.getElementById("question-screen").style.display = "none";
+        document.getElementById("result-screen").style.display = "block";
+        window.scrollTo(0,0);
+
+        let finalType = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+        const res = results[finalType];
+
+        document.getElementById("r-title").innerHTML = res.title;
+        document.getElementById("r-desc").innerHTML = res.desc;
+
+        let linksHtml = "";
+        res.links.forEach(link => {
+            if(link.url === "#") {
+                linksHtml += `
+                    <div class='link-btn disabled-btn'>
+                        <span>${link.name}</span>
+                        <span class='link-desc'>${link.desc}</span>
+                    </div>`;
+            } else {
+                linksHtml += `
+                    <a href='${link.url}' target='_blank' class='link-btn'>
+                        <span>${link.name}</span>
+                        <span class='link-desc'>${link.desc}</span>
+                    </a>`;
+            }
+        });
+        document.getElementById("r-links").innerHTML = linksHtml;
+    }
+</script>
+</body>
+</html>
